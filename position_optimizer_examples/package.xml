@@ -10,10 +10,10 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>iiwa_moveit       </depend>
-  <depend>ur10_moveit_config</depend>
-  <depend>panda_moveit_config</depend>
-  <depend>position_optimizer</depend>
+  <exec_depend> iiwa_moveit         </exec_depend>
+  <exec_depend> ur10_moveit_config  </exec_depend>
+  <exec_depend> panda_moveit_config </exec_depend>
+  <exec_depend> position_optimizer  </exec_depend>
 
   <export>
 
