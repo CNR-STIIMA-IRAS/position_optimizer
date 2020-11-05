@@ -2,6 +2,7 @@
 This directory provides the packages and example to use the CGASA algorithm to optimize the manipulabilty indexes of the initial and final poses for a robot manipulation task.
 
 ---
+
 ## 1.Installation
 git clone
 will install three main packages
