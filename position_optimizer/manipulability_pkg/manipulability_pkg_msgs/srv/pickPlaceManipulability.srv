@@ -1,0 +1,14 @@
+geometry_msgs/Pose  pick_pose
+geometry_msgs/Pose  place_pose
+string              pick_name
+string              place_name
+float32[]           seed_pick_joints
+float32[]           seed_place_joints
+bool                precomputed_path
+---
+bool success
+float32[] manipulability
+float32[] pick_joints
+float32[] place_joints
+float32   planning_time
+float32   drift_index

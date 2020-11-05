@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>position_optimizer</name>
+  <version>0.0.0</version>
+  <description>The position_optimizer package</description>
+  <maintainer email="paolo@todo.todo">paolo</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>rospy</depend>
+  <depend>manipulability_pkg_msgs</depend>
+  <depend>tf</depend>
+  <depend>geometry_msgs</depend>
+
+  <export>
+
+  </export>
+</package>

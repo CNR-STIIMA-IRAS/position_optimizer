@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot_name"  default="ur"/>
+
+  <param name="/manuel_controllers" type="bool" value="false" />
+
+  <arg name="use_case" default="test"/> <!--cabin,cargo,test-->
+  <arg name="pipeline" default="ompl"/>
+
+  <param name="planning_group" type="string" value="manipulator" />
+  <param name="base_link"      type="string" value="base_link" />
+  <param name="tip_link"       type="string" value="ee_link" />
+
+  <rosparam command="load" file="$(find position_optimizer)/config/GA_params.yaml"/>
+  <rosparam command="load" file="$(find position_optimizer)/config/SA_params.yaml"/>
+  <rosparam command="load" file="$(find position_optimizer)/config/scene_objects.yaml"/>
+
+  <rosparam command="load" file="$(find position_optimizer)/config/$(arg robot_name)/$(arg use_case)_chromosome_params.yaml"/>
+  <rosparam command="load" file="$(find position_optimizer)/config/$(arg robot_name)/trajectories.yaml"/>
+
+  <node pkg="position_optimizer" name="genetic_alg"          type="genetic_alg.py"       output="screen" />
+  <node pkg="object_loader"    name="context_manager_node" type="context_manager_node" output="screen" respawn="true"/>
+
+  <include file="$(find ur10_moveit_config)/launch/demo.launch">
+    <arg name="limited"  value="true"/>
+    <arg name="pipeline" value="$(arg pipeline)"/>
+  </include>
+
+  <include file="$(find manipulability_pkg)/launch/pick_place_manipulability.launch" />
+
+</launch>
+

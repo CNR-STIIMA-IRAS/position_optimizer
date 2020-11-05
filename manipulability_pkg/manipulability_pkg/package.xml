@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>manipulability_pkg</name>
+  <version>0.0.0</version>
+  <description>The manipulability_pkg package</description>
+  
+  <author email="paolo.franceschi@stiima.cnr.it">paolo franceschi</author>
+  <maintainer email="paolo.franceschi@stiima.cnr.it">paolo franceschi</maintainer>
+
+  <license>TODO</license>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <depend>   object_loader_msgs       </depend>
+  <depend>   manipulability_pkg_msgs  </depend>
+  <depend>   roscpp                   </depend>
+  <depend>   descartes_moveit         </depend>
+  <depend>   rosdyn_core              </depend>
+  <depend>   moveit_planning_helper   </depend>
+  <depend>   descartes_planner        </depend>
+  
+  <depend>   moveit_core                    </depend>
+  <depend>   moveit_ros_planning_interface  </depend>
+  <depend>   interactive_markers            </depend>
+  
+  
+</package>

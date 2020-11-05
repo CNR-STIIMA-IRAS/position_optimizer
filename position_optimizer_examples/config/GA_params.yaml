@@ -1,0 +1,10 @@
+individuals_number    : 50      # number of individuals
+max_generations_number: 100     # maximum iteration number of the GA
+selection_method      : "rank"  # selection method of the GA; already implemented are roulette_wheel, roulette_wheel_probability, tournament
+mutation_rate         : 0.05    # mutation rate of the individuals each generation
+last_elements         : 3       # stop criterion is when the best elements of the last n generations -specified here- are equals
+probability_rank      : 0.05    # parameter to tune the probability assigned to each individual according to (1-pc)^(n-i)*pc
+weight                : [1, 1]  # a weight used to scale the manipulability of the pick or the place poses
+final_annealing       : True    # if False when the GA terminates no further SA optimization will be performed
+save_data_to_txt      : False   # if True will save data in txt files relative to the history of the populations for analysis
+

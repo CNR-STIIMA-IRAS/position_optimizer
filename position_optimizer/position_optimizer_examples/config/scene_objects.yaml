@@ -1,0 +1,6 @@
+object_name     : "box"     # name of the object to be manipulated (must coincide with one of the objects defined below)
+environment_name: "table"   # name of the object representing teh environment where the object have to be placed (must coincide with one of the objects defined below)
+# list of the possible objects
+box           : { box : [ 0.01, 0.4, 0.1 ]                          , color: [ 255,255,   0, 1 ] }
+table         : { box : [ 0.5, 0.7, 0.2 ]                           , color: [   0,  0, 255, 1 ] }
+custom_object : { mesh: "package://<mesh_pkg>/meshes/mesh_name.stl" , color: [   0,255,   0, 1 ] }

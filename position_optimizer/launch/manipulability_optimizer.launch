@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="use_case" default="cabin"/> <!--cabin,cargo,test-->
+  <arg name="planner"  default="dirrt"/>
+  <arg name="robot_name"  default="iiwa"/>
+
+  <param name="/manuel_controllers" type="bool" value="true" />
+
+  <group ns="iiwa" >
+    <param name="planning_group" type="string" value="manipulator" />
+    <param name="base_link"      type="string" value="iiwa_link_0" />
+    <param name="tip_link"       type="string" value="EE_link_grip" />
+
+    <rosparam command="load" file="$(find position_optimizer)/config/GA_params.yaml"/>
+    <rosparam command="load" file="$(find position_optimizer)/config/SA_params.yaml"/>
+    <rosparam command="load" file="$(find position_optimizer)/config/scene_objects.yaml"/>
+    <rosparam command="load" file="$(find position_optimizer)/config/$(arg robot_name)/$(arg use_case)_chromosome_params.yaml"/>
+    <rosparam command="load" file="$(find position_optimizer)/config/$(arg robot_name)/trajectories.yaml"/>
+<!--    <rosparam command="load" file="$(find position_optimizer)/config/base_traj.yaml"/>-->
+
+    <node pkg="position_optimizer" name="genetic_alg"          type="genetic_alg.py"       output="screen" />
+    <node pkg="object_loader"    name="context_manager_node" type="context_manager_node" output="screen" respawn="true"/>
+
+    <include file="$(find manipulability_pkg)/launch/pick_place_manipulability.launch"/>
+  </group >
+
+  <include file="$(find manipulability_pkg)/launch/$(arg robot_name)_move_group_rviz.launch" >
+    <arg name="planner" default="$(arg planner)"/>
+  </include>
+  <include file="$(find manipulability_pkg)/launch/configuration_manager.launch" />
+</launch>
+
+
+
+

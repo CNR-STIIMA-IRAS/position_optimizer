@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot"     default="panda"/>
+  <arg name="use_case"  default="cartesian"/> <!--cartesian,spherical-->
+
+  <param name="planning_group" type="string" value="panda_arm" />
+  <param name="base_link"      type="string" value="panda_link0" />
+  <param name="tip_link"       type="string" value="panda_link8" />
+
+  <rosparam command="load" file="$(find position_optimizer_examples)/config/GA_params.yaml"/>
+  <rosparam command="load" file="$(find position_optimizer_examples)/config/SA_params.yaml"/>
+
+  <rosparam command="load" file="$(find position_optimizer_examples)/config/scene_objects.yaml"/>
+  <rosparam command="load" file="$(find position_optimizer_examples)/config/$(arg robot)/$(arg use_case)_chromosome_params.yaml"/>
+  <rosparam command="load" file="$(find position_optimizer_examples)/config/$(arg robot)/joint_config.yaml"/>
+
+  <include file="$(find position_optimizer)/launch/pose_optimizer.launch"/>
+
+  <include file="$(find panda_moveit_config)/launch/demo.launch"/>
+
+</launch>

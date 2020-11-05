@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  
+  <node pkg="manipulability_pkg" name="pick_place_manipulability_srv"  type="pick_place_manipulability_srv"  output="screen" />
+  
+</launch>
+
+
+
