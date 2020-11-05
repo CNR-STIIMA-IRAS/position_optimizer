@@ -131,3 +131,17 @@ Once the required parameters are set, launching the following manipulability_opt
 </launch>
 
 ``` 
+
+---
+
+The position_optimizer_example already contains different robot examples, to easy run it just type
+```
+$ roslaunch position_optimizer_examples ur_manipulability_optimizer.launch 
+``` 
+This package will require different moveit packages for the different robot used, please refer to:
+
+- [universal_robot](https://github.com/ros-industrial/universal_robot.git) to run the examples with the UR robots,
+- [iiwa_stack](https://github.com/CNR-ITIA-IRAS/iiwa_stack) to run the examples with the KUKA iiwa robots,
+- [panda](https://github.com/ros-planning/panda_moveit_config.git) to run the examples with the panda robot
+
+Once the algorithm terminates, the best initial and final poses found, along with the corresponding joint configurations, are written in the _optimized_poses.txt_, under the position_optimizer/data/ directory
