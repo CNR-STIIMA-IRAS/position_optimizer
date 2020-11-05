@@ -35,12 +35,12 @@ class Individual:
         self.drift_index = 0.0
 
         self.manip_service_ns = "pick_place_manipulability_srv"
-        rospy.loginfo("waiting for " + rospy.get_namespace() + self.manip_service_ns)
+        rospy.logdebug("waiting for " + rospy.get_namespace() + self.manip_service_ns)
         rospy.wait_for_service(self.manip_service_ns)
         self.pick_place_man_cli = rospy.ServiceProxy(self.manip_service_ns, pickPlaceManipulability)
 
         self.plan_service_ns = "pick_place_plan_srv"
-        rospy.loginfo("waiting for " + rospy.get_namespace() + self.plan_service_ns)
+        rospy.logdebug("waiting for " + rospy.get_namespace() + self.plan_service_ns)
         rospy.wait_for_service(self.plan_service_ns)
         self.pick_place_plan_cli = rospy.ServiceProxy(self.plan_service_ns, pickPlaceManipulability)
 
@@ -215,7 +215,7 @@ class Individual:
         resp = self.pick_place_man_cli(req)
 
         if resp.success is not True:
-            rospy.logerr("error in checking the pose retrying")
+            rospy.logerr("error in checking the pose")
 
             self.fitness = 0.0001
             self.pick_manipulability  = 0.0001
@@ -251,7 +251,7 @@ class Individual:
         resp = self.pick_place_plan_cli(req)
 
         if resp.success is not True:
-            rospy.logerr("error in planning the pose retrying")
+            rospy.logerr("error in planning the pose")
             return False
         else:
             self.fitness = self.weight[0] * resp.manipulability[0] + self.weight[1] * resp.manipulability[1]
@@ -260,13 +260,6 @@ class Individual:
 
             self.pick_joints = resp.pick_joints
             self.place_joints = resp.place_joints
-            ###### manipolabilita fion qui
-
-            ####altrimenti altro criterio da decidere
-            # self.drift_index = resp.drift_index
-            # print '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>><drift index::' + str(self.drift_index)
-            # raw_input()
-            ####altrimenti altro criterio da decidere
 
             return True
 
@@ -287,22 +280,3 @@ class Individual:
             return rospy.get_param(string)
         else:
             rospy.logerr("%s/%s not found ! exit", rospy.get_namespace(), string)
-
-
-if __name__ == "__main__":
-
-
-
-
-
-
-    xx = np.linspace(0,10,50)
-    yy = np.linspace(0,10,50)
-
-    e = []
-    e.append( xx )
-    e.append( yy )
-
-
-    print(random.choice(e[0]))
-    print(random.choice(e[1]))

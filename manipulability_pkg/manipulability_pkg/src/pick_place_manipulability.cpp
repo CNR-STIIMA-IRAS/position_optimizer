@@ -274,7 +274,7 @@
     
     if(collision_result.contact_count != 0)
     {
-      ROS_ERROR("collision found");
+      ROS_DEBUG("collision found");
       for(auto& p : collision_result.contacts)
         ROS_ERROR_STREAM( "Contact detected between: "<<p.first.first.data()<<" and "<<p.first.second.data());
       return false;
@@ -374,7 +374,7 @@
   {
     if(!t.getParams())
     {
-      ROS_INFO ( "error in getting trajectories params" );
+      ROS_ERROR ( "error in getting params" );
       return false;
     }
     
@@ -443,7 +443,7 @@
     
     if(!t.setTargetJointsFromTargetPose(*descartes_model_))
     {
-      ROS_FATAL_STREAM("unable to compute "+t.id_+" pose");
+      ROS_FATAL_STREAM("unable to compute IK solution for "+t.id_+"  pose");
       return false;
     }
     return true;
@@ -472,7 +472,7 @@
     move_group_->setMaxVelocityScalingFactor (velocity_factor);
     move_group_->setStartStateToCurrentState();
     
-    ROS_INFO("planning with %s", move_group_->getPlannerId().c_str());
+    ROS_DEBUG("planning with %s", move_group_->getPlannerId().c_str());
     
     moveit::planning_interface::MoveItErrorCode err = move_group_->plan ( my_plan );
     try
@@ -493,7 +493,7 @@
     }
     catch(...)
     {
-      ROS_INFO("booooooo");
+      ROS_INFO("IDK");
     }
     
     return true;
@@ -503,7 +503,7 @@
   {
     if (!configScene(req))
     {
-      ROS_ERROR("error in scene configure . return");
+      ROS_ERROR("error in scene configuration . return");
       return false;
     }
     
@@ -533,8 +533,8 @@
     
     std::vector<double> prod;
     
-//     for (auto j:joints)
-//       ROS_FATAL_STREAM("j: "<<j);
+    for (auto j:joints)
+      ROS_DEBUG_STREAM("j: "<<j);
     
     for (int i=0; i<joints.size(); i++)
     {
@@ -546,8 +546,8 @@
     double k = 100;
     double penalty = 1 - exp(-k * min_prod);
     
-//     ROS_FATAL_STREAM("mu: "<<(std::sqrt((J_b * J_b.transpose()).determinant())));
-//     ROS_FATAL_STREAM("penal: "<<penalty);
+    ROS_DEBUG_STREAM("mu: "<<(std::sqrt((J_b * J_b.transpose()).determinant())));
+    ROS_DEBUG_STREAM("penal: "<<penalty);
     
     return (std::sqrt((J_b * J_b.transpose()).determinant())) * penalty;
   }
@@ -563,13 +563,12 @@
       return true;
     }
     
-    ROS_INFO_STREAM("id: "<<req.place_name);
+    ROS_DEBUG_STREAM("id: "<<req.place_name);
     
     
     Trajectory t_pick(req.pick_name, nh, joint_home_.size()) ;
     if (!getTrajectory(t_pick, req)) 
     {
-      ROS_INFO ( "error in getting trajectory" );
       res.success = false;
       reset();
       return true;
@@ -578,7 +577,7 @@
     Trajectory t_place(req.place_name, nh, joint_home_.size()) ;
     if (!getTrajectory(t_place, req)) 
     {
-      ROS_INFO ( "error in getting trajectory" );
+      ROS_ERROR ( "error in getting trajectory" );
       res.success = false;
       reset();
       return true;
@@ -590,7 +589,7 @@
     {
       if (t_place.getPlannedTrajectoryFromParam())
       {
-        ROS_INFO_STREAM("setting trajectory "+t_place.id_+ " to param");
+        ROS_DEBUG_STREAM("setting trajectory "+t_place.id_+ " to param");
         std::vector<std::vector<double>> planned_path;
         for (auto js : t_place.plan.trajectory_.joint_trajectory.points)
           planned_path.push_back(js.positions);
@@ -602,7 +601,7 @@
         nh.setParam("/preload_radius", 0.07);
       }
       else
-        ROS_INFO_STREAM("trajectory "+t_place.id_+" not found");
+        ROS_WARN_STREAM("trajectory "+t_place.id_+" not found");
     }
     else
       nh.deleteParam("/preload_path");
@@ -623,7 +622,7 @@
     
     if( !RRTplan( t_place.getTargetJoints(), t_place.plan, t_place.planning_time, t_place.planning_velocity ) )
     {
-      ROS_ERROR("%s: RRTplan failed! Abort?", t_place.id_.c_str());
+      ROS_ERROR("%s: RRTplan failed!", t_place.id_.c_str());
       if(!t_place.setTargetJointsFromTargetPose(*descartes_model_))
         ROS_ERROR("this pose has some serious problem");
       
@@ -660,11 +659,11 @@
     double mu_place;
     
     {
-      ROS_INFO_STREAM("id: "<<req.pick_name);
+      ROS_DEBUG_STREAM("id: "<<req.pick_name);
       Trajectory t(req.pick_name, nh, joint_home_.size()) ;
       if (!getTrajectory(t, req)) 
       {
-        ROS_INFO ( "error in getting trajectory" );
+        ROS_ERROR ( "error in getting trajectory" );
         res.success = false;
         reset();
         return true;
@@ -682,13 +681,13 @@
       
       if (collision_result.collision )
       {
-        ROS_ERROR_STREAM("self collisoin found in pick");
+        ROS_ERROR_STREAM("self collisoin found in pick pose");
         res.success = false;
         reset();
         return true;
       }
       
-      ROS_INFO_STREAM("Test 1: Current state is "
+      ROS_DEBUG_STREAM("Test 1: Current state is "
                       << (collision_result.collision ? "in" : "not in")
                       << " self collision");
       
@@ -698,11 +697,11 @@
       mu_pick = manipulability(t.getTargetJoints());
     }
     {
-      ROS_INFO_STREAM("id: "<<req.place_name);
+      ROS_DEBUG_STREAM("id: "<<req.place_name);
       Trajectory t(req.place_name, nh, joint_home_.size()) ;
       if (!getTrajectory(t, req)) 
       {
-        ROS_INFO ( "error in getting trajectory" );
+        ROS_ERROR ( "error in getting trajectory" );
         res.success = false;
         reset();
         return true;

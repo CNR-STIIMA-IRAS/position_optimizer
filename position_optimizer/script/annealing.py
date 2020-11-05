@@ -74,7 +74,7 @@ def annealing(ind,pick = True):
     #     precomp = False
 
     while not ann_ind.planTrajectory(precomp):
-        print ("\n\nqualcosa non va con la soluzione del genetico\n\n")
+        rospy.logerr("\n\nSomething is wrong with the GA solution. check\n\n")
         random_crom(ann_ind.chromosome, history.crom[0], pick)
         ann_ind.chromosome_to_pose()
 
@@ -85,10 +85,10 @@ def annealing(ind,pick = True):
     best_of_all = copy.deepcopy(best_crom)
 
     for i in range(n):
-        print('Cycle: ' + str(i) + ' with Temperature: ' + str(t))
+        rospy.loginfo('Cycle: ' + str(i) + ' with Temperature: ' + str(t))
         for j in range(m):
 
-            print ("stage" + str(i) + ", trial: "+ str(j))
+            rospy.loginfo("evaluating candidate: "+ str(j) + ", at step" + str(i))
 
             random_crom(ann_ind.chromosome, history.crom[i], pick)
 
@@ -146,10 +146,8 @@ def annealing(ind,pick = True):
         t = frac * t
 
     ind.chromosome = copy.deepcopy(best_crom)
-    # print solution
-    print('Best solution: ' + str(ann_ind.chromosome))
-    print('Best objective: ' + str(current_manip))
 
-    print ("\n\n\n\n\n\n\n\n\n\n\n"+str(na)+"\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    rospy.loginfo('Best solution: ' + str(ann_ind.chromosome))
+    rospy.loginfo('Max manipulability: ' + str(current_manip))
 
     return history, all_man

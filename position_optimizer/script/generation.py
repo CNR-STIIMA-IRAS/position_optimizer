@@ -19,7 +19,7 @@ class Generation:
             total_fitness += ind.fitness
 
         if total_fitness == 0:
-            rospy.logerr("fitness is zero supererror")
+            rospy.logerr("fitness is zero. Not allowed!")
             return False
 
         for ind in self.population:
@@ -86,11 +86,6 @@ class Generation:
 
         inds.sort(key=lambda x: x.fitness, reverse=False)
 
-        for ind in inds:
-            rospy.loginfo( str(ind.id) +", "+ str(ind.fitness))
-
-        rospy.logerr(len(self.population)-1)
-
         return (inds[-1])
 
     def crossover(self,mum,dad):
@@ -123,8 +118,6 @@ class Generation:
         n = len(pop)
         for i in range(0, n):
             pop[i].rank_probability = (1-self.pc)**(n-i)*self.pc
-        for i in pop:
-            print "id " + str(i.id) +", rank prob: "+ str(i.rank_probability) +", fitness "+ str(i.fitness) +", diff "+ str(i.differonte)
 
         max_prob = sum(x.rank_probability for x in pop)
         pick = random.uniform(0, max_prob)
@@ -132,17 +125,7 @@ class Generation:
         for ind in pop:
             current += ind.rank_probability
             if current > pick:
-                print "pick id " + str(ind.id)
                 return (ind)
-
-    def cut_population(self):
-        perc = 0.8
-        self.population = self.population[len(self.population)/10:-1]
-
-        rospy.logfatal("length pop: " + str(len(self.population)))
-
-        for i in self.population:
-            print str(i.id) + ", " + str(i.fitness)
 
     def selection(self):
         self.children = []
@@ -150,7 +133,7 @@ class Generation:
         if rospy.has_param("selection_method"):
             method = rospy.get_param("selection_method")
         else:
-            rospy.logerr("%s/%s not found ! default rank", rospy.get_namespace(), "selection_method")
+            rospy.logwarn("%s/%s not found ! default rank", rospy.get_namespace(), "selection_method")
             method = "rank"
 
         for i in range(0,len(self.population)/2):
@@ -161,7 +144,11 @@ class Generation:
             else:
                 rospy.logerr("selection method not found. something wrong is going on")
 
+            counter = 0
             while True:
+                if counter > 1000:
+                    rospy.logerr("More than 1000 times mum and dad chromosomes were exactly the same during selection process. is it ok?")
+
                 if method is "rank" or "roulette_wheel" or "roulette_wheel_probability":
                     mum = self.get_ind(method)
                 # mum = self.get_far_ind(dad)
@@ -169,8 +156,8 @@ class Generation:
                     mum = self.tournament()
 
                 if mum.chromosome != dad.chromosome:
+                    counter = counter+1
                     break
-                rospy.logfatal("********************** mama e papa uguali************************")
 
             son, daughter = self.crossover(mum,dad)
             self.children.append(son)

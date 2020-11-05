@@ -81,8 +81,7 @@ if __name__ == '__main__':
             file2 = open(pat + "/data/" + st + "/gen_"+str(n_gen) + ".txt", "w+")
             file2.write("Generation,Fitness,Rank,Pick_x,Pick_y,Pick_theta,Place_x,Place_y,Place_theta,Pick_manip,Place_manip\n")
 
-        rospy.loginfo("\n\n\n\n\n\n---------------------- new generation: "+str(n_gen)+" -----------------------------\n\n\n\n\n")
-        rospy.loginfo("\n\n\n\n\n\n---------------------- new population size: "+str(len(generation.population))+" -----------------------------\n\n\n\n\n")
+        rospy.loginfo("---------------------- generation number: "+str(n_gen)+" -----------------------------")
 
         for ind in generation.population:
             ind.set_gen_n(n_gen)
@@ -91,7 +90,7 @@ if __name__ == '__main__':
                 unsuccess = unsuccess+1
 
         if not generation.probability():
-            rospy.logfatal("nessuna posa buona, siam nella merda")
+            rospy.logfatal("something not working")
 
         generation.distribution()
 
@@ -103,12 +102,12 @@ if __name__ == '__main__':
             if not generation.population[-1].planTrajectory(use_precomputed_path):
                 iter = iter+1
                 use_precomputed_path = False
-                rospy.loginfo("iter number: "+str(iter))
+                rospy.logdebug("iter number: "+str(iter))
             else:
                 planned = True
                 break
 
-        rospy.loginfo("total iter number: "+str(iter))
+        rospy.logdebug("total iter number: "+str(iter))
 
         if not planned:
             rospy.loginfo("trying planning with old best solution")
@@ -133,7 +132,7 @@ if __name__ == '__main__':
 
                 for i in range(0, int(n_ind * mutation_rate)):
                     ind = random.randint(0, len(generation.children) - 1)
-                    rospy.loginfo("individuo " + str(ind) + " mutante")
+                    rospy.logdebug("mutant individual " + str(ind))
                     generation.mutation(ind)
 
             if write_data:
@@ -142,7 +141,7 @@ if __name__ == '__main__':
                 file2.close()
             continue
         else:
-            rospy.loginfo("well done")
+            rospy.logdebug("well done")
             use_precomputed_path = True
 
         generation.rank()
@@ -150,8 +149,8 @@ if __name__ == '__main__':
         fitness_of_this_gen = []
 
         for ind in generation.population:
-            print ("id: " + str(ind.id) + ", fitness: " + str(ind.fitness) + ", probability: " + str(ind.prob) \
-                  + ", rank: " + str(ind.rank_probability) + ", manip: [ " + str(ind.pick_manipulability) + ", " +str(ind.place_manipulability) + "]")
+            # print ("id: " + str(ind.id) + ", fitness: " + str(ind.fitness) + ", probability: " + str(ind.prob) \
+            #       + ", rank: " + str(ind.rank_probability) + ", manip: [ " + str(ind.pick_manipulability) + ", " +str(ind.place_manipulability) + "]")
 
             if write_data:
                 file2.write( str(ind.id)+", "+ str(ind.fitness) + ", " + str(ind.rank_probability)
@@ -190,7 +189,6 @@ if __name__ == '__main__':
             rospy.loginfo("individuo "+str(ind)+" mutante")
             generation.mutation(ind)
 
-
         best_of_all[-1].set_pick_place_fitness()
         old_generation = copy.deepcopy(generation)
 
@@ -213,25 +211,25 @@ if __name__ == '__main__':
 
         best_of_all[-1].set_pick_place_fitness()
 
-        print "fitness: " + str(old_best.fitness) + " crom: " + str(old_best.chromosome) + " pick: "+ str(
-            old_best.pick_manipulability) + " place: " + str(old_best.place_manipulability)
+        # print "fitness: " + str(old_best.fitness) + " crom: " + str(old_best.chromosome) + " pick: "+ str(
+        #     old_best.pick_manipulability) + " place: " + str(old_best.place_manipulability)
 
-        print "fitness: " + str(best_of_all[-1].fitness) + " crom: " + str(best_of_all[-1].chromosome) + " pick: " + str(
-            best_of_all[-1].pick_manipulability) + " place: " + str(best_of_all[-1].place_manipulability)
+        # print "fitness: " + str(best_of_all[-1].fitness) + " crom: " + str(best_of_all[-1].chromosome) + " pick: " + str(
+        #     best_of_all[-1].pick_manipulability) + " place: " + str(best_of_all[-1].place_manipulability)
 
-        print str(h_pick.manip)
-        print str(h_pick.crom)
-        print str(h_pick.joints)
-        print str(h_place.manip)
-        print str(h_place.crom)
-        print str(h_place.joints)
+        # print str(h_pick.manip)
+        # print str(h_pick.crom)
+        # print str(h_pick.joints)
+        # print str(h_place.manip)
+        # print str(h_place.crom)
+        # print str(h_place.joints)
 
 
         if not best_of_all[-1].planTrajectory():
             rospy.logfatal("something is wrong with the final position")
 
-        print "fitness: " + str(best_of_all[-1].fitness) + " crom: " + str(best_of_all[-1].chromosome) + " pick: " + str(
-            best_of_all[-1].pick_manipulability) + " place: " + str(best_of_all[-1].place_manipulability)
+        # print "fitness: " + str(best_of_all[-1].fitness) + " crom: " + str(best_of_all[-1].chromosome) + " pick: " + str(
+        #     best_of_all[-1].pick_manipulability) + " place: " + str(best_of_all[-1].place_manipulability)
 
         if write_data:
             file3 = open(pat + "/data/"+st+"/pick_annealing.txt","w+")
