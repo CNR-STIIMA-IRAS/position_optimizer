@@ -5,8 +5,8 @@
 
 #include <ros/ros.h>
 
-#include <object_loader_msgs/addObjects.h>
-#include <object_loader_msgs/attachObject.h>
+#include <object_loader_msgs/AddObjects.h>
+#include <object_loader_msgs/AttachObject.h>
 #include <std_srvs/Trigger.h>
 
 #include <moveit/planning_scene_monitor/planning_scene_monitor.h>
@@ -27,9 +27,9 @@ class PickPlaceManipulability
   
   boost::shared_ptr<descartes_moveit::IkFastMoveitStateAdapter> descartes_model_;
   ros::NodeHandle nh;
-  boost::shared_ptr<rosdyn::Chain> chain_bt;
-  ros::ServiceClient add_obj_    = nh.serviceClient<object_loader_msgs::addObjects>   ("add_object_to_scene"  );
-  ros::ServiceClient att_obj_    = nh.serviceClient<object_loader_msgs::attachObject> ("attach_object_to_link");
+  rosdyn::ChainPtr chain_bt;
+  ros::ServiceClient add_obj_    = nh.serviceClient<object_loader_msgs::AddObjects>   ("add_object_to_scene"  );
+  ros::ServiceClient att_obj_    = nh.serviceClient<object_loader_msgs::AttachObject> ("attach_object_to_link");
   ros::ServiceClient remove_obj_ = nh.serviceClient<std_srvs::Trigger>                ("reset_scene"          );
   
   planning_scene_monitor::PlanningSceneMonitorPtr planning_scene_monitor_;

@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   rosdyn_core
   moveit_planning_helper
   descartes_planner
+  eigen_conversions
   )
 
 find_package(Boost REQUIRED system filesystem date_time thread )

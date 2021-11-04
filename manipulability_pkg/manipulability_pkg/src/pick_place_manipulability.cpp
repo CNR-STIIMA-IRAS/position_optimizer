@@ -313,10 +313,10 @@
     std_srvs::Trigger rem_srv;
     remove_obj_.call(rem_srv);
     
-    object_loader_msgs::addObjects srv;
+    object_loader_msgs::AddObjects srv;
     
     {
-      object_loader_msgs::object obj;
+      object_loader_msgs::Object obj;
       
       obj.object_type=object_name_;
       
@@ -325,7 +325,7 @@
       srv.request.objects.push_back(obj);
     }
     {
-      object_loader_msgs::object obj;
+      object_loader_msgs::Object obj;
       
       obj.object_type=environment_name_;
       
@@ -611,7 +611,7 @@
     std::string object = object_name_; object +="_0";
     std::string environment = environment_name_; environment +="_0";
     
-    object_loader_msgs::attachObject ob;
+    object_loader_msgs::AttachObject ob;
     ob.request.obj_id = object;
     ob.request.link_name = GRIP_ENDEFFECTOR;
     
@@ -710,7 +710,7 @@
       std::string object = object_name_   ; object +="_0";
       std::string environment = environment_name_; environment +="_0";
       
-      object_loader_msgs::attachObject ob;
+      object_loader_msgs::AttachObject ob;
       ob.request.obj_id = object;
       ob.request.link_name = GRIP_ENDEFFECTOR;
       
