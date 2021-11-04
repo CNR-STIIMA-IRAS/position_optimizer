@@ -1,6 +1,0 @@
-temperature_decrease_step:  30              # number of SA iterations
-trial_each_step: 20                         # number of new solution evaluated each iteration
-initial_acceptance_probability: 0.7         # probability to accept a worst solution candidate at the first iteration
-final_acceptance_probability: 0.01          # probability to accept a worst solution candidate at the last iteration
-delta_pick:  [ 0.03,0.03,0.03,0,0,0.03 ]    # (x,y,z,R,P,Y), maximum search space around the candidate solution for the pick pose [m]
-delta_place: [ 0.03,0.03,0.03,0,0,0.03 ]    # (x,y,z,R,P,Y), maximum search space around the candidate solution for the place pose [m]
